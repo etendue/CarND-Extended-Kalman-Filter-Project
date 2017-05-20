@@ -37,7 +37,7 @@ FusionEKF::FusionEKF() {
     * Set the process and measurement noises
   */
   MatrixXd P = MatrixXd(4,4);
-  MatrixXd F = MatrixXd(2,4);
+  MatrixXd F = MatrixXd(4,4);
   MatrixXd Q = MatrixXd(4,4);
 
 	P << 1, 0, 0, 0,
