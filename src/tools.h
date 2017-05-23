@@ -27,7 +27,11 @@ public:
   /**
   * A helper method to calculate Jacobians.
   */
-  MatrixXd CalculateJacobian(const VectorXd& x_state);
+  bool CalculateJacobian(const VectorXd& x_state,MatrixXd &Hj);
+  /**
+   * A help method to normalize a cyclic value e.g. angle in -pi ~ pi
+   */
+  double NormalizeMinMax(double x, double min, double max);
 
 };
 

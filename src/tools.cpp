@@ -1,4 +1,5 @@
 #include <iostream>
+#include <assert.h>
 #include "tools.h"
 
 using Eigen::VectorXd;
@@ -44,16 +45,13 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 
 }
 
-MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
+bool Tools::CalculateJacobian(const VectorXd& x_state,MatrixXd &Hj) {
   /**
     * Calculate a Jacobian here.
   */
 
-	MatrixXd Hj(3,4);
 	// initialize the Jacobian Matrix
-	Hj << 0,0,0,0,
-			  0,0,0,0,
-				0,0,0,0;
+
 	//recover state parameters
 	double px = x_state(0);
 	double py = x_state(1);
@@ -62,13 +60,13 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
 	//pre-compute a set of terms to avoid repeated calculation
 	double p2= px * px + py * py; //square of p
-	double p = sqrt(p);           //length of vector or distance
+	double p = sqrt(p2);           //length of vector or distance
 	double p3 = p * p2;           //third power of p
 
 	//check division by zero
-	if (p2 == 0) {
+	if (p == 0) {
 		cout << "CalculateJacobian () - Error - Division by Zero" << endl;
-		return Hj;
+		return false;
 	}
 
 	//compute the Jacobian matrix
@@ -76,5 +74,13 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 			  -py / p2,                     px / p2,                       0,      0,
 			  py* (vx * py - vy * px) / p3, px * (px * vy - py * vx) / p3, px / p, py/ p;
 
-	return Hj;
+	return true;
+}
+
+double Tools::NormalizeMinMax(double x, double min, double max){
+
+  assert(min <max);
+  double width = max - min;
+  double offset = x - min;
+  return offset - std::floor(offset/width)*width + min;
 }
