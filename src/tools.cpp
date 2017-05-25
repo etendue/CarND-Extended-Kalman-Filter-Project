@@ -49,7 +49,8 @@ bool Tools::CalculateJacobian(const VectorXd& x_state,MatrixXd &Hj) {
   /**
     * Calculate a Jacobian here.
   */
-
+  assert(Hj.rows()==3 && Hj.cols()==4);
+  assert(x_state.size() ==4);
 	// initialize the Jacobian Matrix
 
 	//recover state parameters
