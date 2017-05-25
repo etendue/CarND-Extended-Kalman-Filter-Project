@@ -6,8 +6,6 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using namespace std;
 
-constexpr double pi() { return acos(-1.0);}
-
 KalmanFilter::KalmanFilter() {}
 
 KalmanFilter::~KalmanFilter() {}
@@ -93,7 +91,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   VectorXd hx = VectorXd(3);
   hx << hx_range,hx_bearing,hx_range_rate;
 
-  double mea_bearing = tools.NormalizeMinMax(z[1],-pi(),pi());
+  double mea_bearing = tools.NormalizeMinMax(z[1],-M_PI,M_PI);
   cout <<" pre:"<<hx_range<<" "<<hx_bearing<<" "<<hx_range_rate <<endl;
   cout <<" msr:"<<z[0] << " "<< z[1]<< " "<<z[2]<<endl;
   VectorXd y = z - hx;
@@ -102,12 +100,12 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   y[1] = mea_bearing - hx_bearing;
   cout <<" nor:" << mea_bearing << " y[1]" << y[1] << endl;
   // assuming there is no big jump of bearing
-  if (y[1] > pi())
+  if (y[1] > M_PI)
   {
-    y[1] -= 2*pi();
-  }else if(y[1] < -pi())
+    y[1] -= 2* M_PI;
+  }else if(y[1] < -M_PI)
   {
-    y[1] += 2*pi();
+    y[1] += 2*M_PI;
   }
 
 
